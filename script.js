@@ -1,61 +1,84 @@
 let computerScore = 0;
-let humanScore = 0;
-// Get rock, paper or scissors from the computer
+let playerScore = 0;
+
+// Get Rock, Paper or Scissors from the computer
 function getComputerChoice() {
-  let randomNum = Math.floor(Math.random() * 3) + 1;
-
-  if (randomNum === 1) {
-    return "rock";
-  } else if (randomNum === 2) {
-    return "paper";
-  } else {
-    return "scissors";
-  }
+  const randomNum = Math.floor(Math.random() * 3);
+  return ["Rock", "Paper", "Scissors"][randomNum];
 }
 
-// Get rock, paper or scissors from the player
-function getHumanChoice() {
-  let humanChoice = prompt(
-    'Choose "Rock", "Paper", or "Scissors"'
-  ).toLowerCase();
-  console.log(humanChoice);
-  return humanChoice;
-}
+function playRound(playerChoice) {
+  const computerChoice = getComputerChoice();
 
-function playRound(humanChoice, computerChoice) {
   if (
-    (humanChoice === "rock" && computerChoice === "scissors") ||
-    (humanChoice === "paper" && computerChoice === "rock") ||
-    (humanChoice === "scissors" && computerChoice === "paper")
+    (playerChoice === "Rock" && computerChoice === "Scissors") ||
+    (playerChoice === "Paper" && computerChoice === "Rock") ||
+    (playerChoice === "Scissors" && computerChoice === "Paper")
   ) {
-    alert("Player wins the round.");
-    humanScore++;
+    showWhoWonRound.textContent = `Player wins the round. Computer chose ${computerChoice}.`
+    playerScore++;
   } else if (
-    (computerChoice === "rock" && humanChoice === "scissors") ||
-    (computerChoice === "paper" && humanChoice === "rock") ||
-    (computerChoice === "scissors" && humanChoice === "paper")
+    (computerChoice === "Rock" && playerChoice === "Scissors") ||
+    (computerChoice === "Paper" && playerChoice === "Rock") ||
+    (computerChoice === "Scissors" && playerChoice === "Paper")
   ) {
-    alert("Computer wins the round.");
+    showWhoWonRound.textContent = `Computer wins the round. Computer chose ${computerChoice}.`
     computerScore++;
   } else {
-    alert("It's a draw")
+
+    showWhoWonRound.textContent = `It's a draw. Both chose ${computerChoice}.`
+  }
+
+  updateScores();
+
+  if (playerScore === 5 || computerScore === 5) {
+    if (computerScore > playerScore) {
+      alert("Game over: You lose!");
+    } else if (computerScore < playerScore) {
+      alert ("Game over: You win!");
+    } else {
+      alert ("Game over: It's a draw!");
+    }
+
+    computerScore = 0;
+    playerScore = 0;
+
+    updateScores()
+    showWhoWonRound.textContent = ""
+
   }
 }
 
-function playGame() {
-    for (i = 0; i < 5; i++) {
-        const computerChoice = getComputerChoice();
-        console.log(computerChoice)
-        const humanChoice = getHumanChoice();
-        playRound(humanChoice, computerChoice);       
-    }
-    if (computerScore > humanScore) {
-        alert("You lose")
-    } else if (computerScore < humanScore) {
-        alert("You win")
-    } else {
-        alert("It ended in a draw")
-    }
+function updateScores() {
+  document.querySelector("#computer-score").textContent = `Computer score: ${computerScore}`;
+  document.querySelector("#player-score").textContent = `Player score: ${playerScore}`;
 }
 
-playGame();
+const buttonContainer = document.querySelector("#button-container");
+
+["Rock", "Paper", "Scissors"].forEach(name => {
+  const button = document.createElement("button");
+  button.textContent = name;
+  buttonContainer.appendChild(button);
+
+  button.addEventListener("click", () => {
+    playRound(name);
+  });
+});
+
+
+const showComputerScore = document.createElement("p");
+const showPlayerScore = document.createElement("p");
+
+showComputerScore.setAttribute("id", "computer-score");
+showPlayerScore.setAttribute("id", "player-score");
+
+showComputerScore.textContent = `Computer score: ${computerScore}`;
+showPlayerScore.textContent = `Player score: ${playerScore}`
+
+buttonContainer.appendChild(showComputerScore);
+buttonContainer.appendChild(showPlayerScore);
+
+showWhoWonRound = document.createElement("p")
+
+buttonContainer.appendChild(showWhoWonRound);

@@ -1,0 +1,21 @@
+#button-container {
+    outline: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: bisque;
+}
+
+button {
+    margin: 10px;
+    width: 130px;
+    height: 50px;
+    background-color:crimson;
+    color: white;
+    border-radius: 5px;
+}
+
+p {
+    margin: 5px;
+}
